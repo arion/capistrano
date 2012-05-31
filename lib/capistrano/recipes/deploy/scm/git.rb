@@ -141,13 +141,13 @@ module Capistrano
 
           execute = []
           execute << "#{git} clone #{verbose} #{args.join(' ')} #{variable(:repository)} #{destination}"
+
+          # checkout into a local branch rather than a detached HEAD
+          execute << "cd #{destination} && #{git} checkout #{verbose} -b deploy #{revision}"
           
           if depth
             execute << "rm -rf #{File.join(destination, '.git')}"
           end
-
-          # checkout into a local branch rather than a detached HEAD
-          execute << "cd #{destination} && #{git} checkout #{verbose} -b deploy #{revision}"
 
           if variable(:git_enable_submodules)
             execute << "#{git} submodule #{verbose} init"
